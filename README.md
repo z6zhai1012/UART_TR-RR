@@ -1,3 +1,5 @@
 # UART_TR-RR
 
-Code for UART transmitter is provided along with its testbench.
+1. UART Transmitter and Receiver Implementation along with reference designs and testbenches.
+2. Simulation waveform screenshots are provided.
+3. Performance comparisons are done.
