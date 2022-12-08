@@ -121,7 +121,7 @@ module UART_TR
     // uart_tx_out behavior
     always @ (posedge sys_clk or negedge sys_reset_n) begin
         if (!sys_reset_n)
-            uart_tx_out <= 1'b0;
+            uart_tx_out <= 1'b1;                    // Default value is 1
         // If in transmission, choose data out
         else if (tx_state) begin
             case (bits_counter)
