@@ -1,0 +1,25 @@
+My Design:			
+	Part:					Artix-7 xc7a100tcsg324-1
+
+	Timing:
+		WNS: 				16.336 ns
+	Power:
+		Total On-Chip Power: 	0.092 W
+	Utilization:
+		LUT				29
+		FF				28
+		IO				13
+		BUFG				1
+
+Reference Design:			
+	Part:					Artix-7 xc7a100tcsg324-1
+
+	Timing:
+		WNS: 				16.336 ns
+	Power:
+		Total On-Chip Power: 	0.092 W
+	Utilization:
+		LUT				29
+		FF				28
+		IO				13
+		BUFG				1
