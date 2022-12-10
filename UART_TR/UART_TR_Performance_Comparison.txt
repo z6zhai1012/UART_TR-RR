@@ -23,3 +23,16 @@ Reference Design:
 		FF						28
 		IO						13
 		BUFG					1
+
+Reference FSM Design:			
+	Part:					Artix-7 xc7a100tcsg324-1
+
+	Timing:
+		WNS: 					NA
+	Power:
+		Total On-Chip Power: 	1.961 W
+	Utilization:
+		LUT						21
+		FF						13
+		IO						13
+		BUFG					1
