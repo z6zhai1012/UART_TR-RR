@@ -24,7 +24,8 @@ This design is designed to connect with APB-UART Bridge.
     UART Ports
 
     input               clk,            // 50MHz Clock Signal  
-    input               rst_n,          // Reset Negative  
+    input               rst_n,          // Reset Negative
+    
     input   [15:0]      cmd,            // [15]     : Read/Write 0/1  
                                         // [14:8]   : Address  
                                         // [7:0]    : Data  
@@ -63,6 +64,7 @@ This design is designed to connect with APB-UART Bridge.
     input               clk,            // 50 MHz Clock Signal
     output              uart_clk,       // 115200Hz Clock Signal
     input               rst_n,          // Reset Negative
+
     input   [15:0]      cmd,            // [15]     : Read/Write 0/1  
                                         // [14:8]   : Address  
                                         // [7:0]    : Data
@@ -130,7 +132,7 @@ This design is designed to connect with APB-UART Bridge.
     UART Interface
 
         1.  Generate a slower uart clk at 115200Hz
-        2.  Once a cmd packet arrives, decode it and execute
+        2.  Once a command packet arrives, decode it and execute
         3.  If it's a read operation, send only the address;
             If it's a write operation, send the address (along with Read/Write Bit) first,
                 and then send the data
