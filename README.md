@@ -6,4 +6,5 @@
 
 # UART Interface
 
-1. ![plot](./UART_Ports.jfif)
+1. Interface Ports
+    ![plot](./UART_Ports.jfif)
