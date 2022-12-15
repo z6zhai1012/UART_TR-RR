@@ -11,13 +11,18 @@
 //      3. Design is based on https://blog.csdn.net/qq_43244515/article/details/124514416
 
 // Input Ports:
-//      1. sys_clk                  : System Clock Provided
-//      2. sys_reset_n              : Reset Negative
-//      3. uart_tx_en               : Transmission Enable
-//      4. uart_tx_data[width-1:0]  : Transmission Data
+//      1. clk                      : 50MHz Clock Signal  
+//      2. rst_n                    : Reset Negative  
+//      3. cmd  [15:0]              : [15]      Read/Write 0/1  
+//                                    [14:8]    Address  
+//                                    [7:0]     Data  
+//      4. uart_valid               : Valid Signal for UART  
+//      5. tx                       : UART Transmitter
 //
-// Output Port:
-//      1. uart_tx_out              : Transmission Data Out
-//      2. uart_tx_done             : Signaling
+// Output Ports:
+//      1. uart_ready               : Ready Signal for UART  
+//      2. read_data    [7:0]       : Date Read through UART  
+//      3. read_valid               : Valid Signal for read_data  
+//      4. rx                       : UART Receiver  
 //
 // *****************************************************************************

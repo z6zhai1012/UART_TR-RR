@@ -31,10 +31,14 @@
     output              read_valid,     // Valid Signal for read_data  
 
     output              tx,             // UART Transitter  
-    input               rx,             // UART Receiver  
+    input               rx              // UART Receiver  
 ```
 ```
     UART Transmitter
+
+    input               clk,            // 50MHz Clock Signal  
+    input               rst_n,          // Reset Negative  
+    input               
 ```
 
 3. UART Frame Composition
