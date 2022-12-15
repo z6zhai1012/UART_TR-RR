@@ -16,18 +16,18 @@ module UART_IF
 )
 (
     input                           clk,                // 50 MHz Clock Signal
-    output                          uart_clk,           // 115200Hz Clock Signal
+    output  reg                     uart_clk,           // 115200Hz Clock Signal
     input                           rst_n,              // Reset Negative
     
     input   [CMD_PKT_LEN - 1:0]     cmd,                // [15]     : Read/Write 0/1  
                                                         // [14:8]   : Address  
                                                         // [7:0]    : Data
     input                           uart_valid,         // Valid Signal for UART  
-    output                          uart_ready,         // Ready Signal for UART  
+    output  reg                     uart_ready,         // Ready Signal for UART  
 
-    output  [DATA_WIDTH - 1:0]      tx_data,            // Data to send
-    output                          tx_en,              // Enable data to send
-    input                           tx_done,            // Data sent and done
+    output  reg [DATA_WIDTH - 1:0]  tx_data,            // Data to send
+    output  reg                     tx_en,              // Enable data to send
+    input                           tx_done             // Data sent and done
 );
 
     localparam          CYCLES_PER_BIT  =   SYS_CLK_FREQ / BPS;
@@ -76,7 +76,7 @@ module UART_IF
                         if (send_next == 1)
                             send_next   <=  0;
                         else
-                            send_next   <=  cmd[DATA_WIDTH=1];
+                            send_next   <=  cmd[DATA_WIDTH-1];
                         current_state   <= WAIT;
                     end
                 WAIT:
@@ -102,31 +102,31 @@ module UART_IF
         case (current_state)
             IDLE:
                 begin
-                    uart_ready  =   1;
-                    tx_en       =   0;
-                    tx_data     =   DATA_WIDTH'b0;
+                    uart_ready  <=  1;
+                    tx_en       <=  0;
+                    tx_data     <=  8'b0;
                 end
             SEND:
                 begin
-                    uart_ready  =   0;
-                    tx_en       =   1;
+                    uart_ready  <=  0;
+                    tx_en       <=  1;
                     if (send_next == 1) begin
-                        tx_data =   cmd[DATA_WIDTH-1:0];
+                        tx_data <=  cmd[DATA_WIDTH-1:0];
                     end
                     else begin
-                        tx_data =   cmd[CMD_PKT_LEN-1:DATA_WIDTH];
+                        tx_data <=  cmd[CMD_PKT_LEN-1:DATA_WIDTH];
                     end
                 end
             WAIT:
                 begin
-                    uart_ready  =   0;
-                    tx_en       =   0;
+                    uart_ready  <=  0;
+                    tx_en       <=  0;
                 end
             default:
                 begin
-                    uart_ready  =   1;
-                    tx_en       =   0;
-                    tx_data     =   DATA_WIDTH'b0;
+                    uart_ready  <=  1;
+                    tx_en       <=  0;
+                    tx_data     <=  8'b0;
                 end
         endcase
     end
