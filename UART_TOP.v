@@ -2,14 +2,9 @@
 // Author: Zhen Zhai
 // Date: 12/14/2022
 // 
-// Module Name: UART
-//      1. A simple implementation of UART Interface
-//      2. Each command frame is composed of:
-//          7 bits of data address,
-//          8 bits of data, (Write Only)
-//          1 bit of Read/Write Indicator (0:read; 1:write)
-//      3. Design is based on https://blog.csdn.net/qq_43244515/article/details/124514416
-
+// Module Name: UART_TOP
+//      1. A simple implementation of UART
+//
 // Input Ports:
 //      1. clk                      : 50MHz Clock Signal  
 //      2. rst_n                    : Reset Negative  

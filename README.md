@@ -1,10 +1,14 @@
 # UART_TR-RR
 
+This design is done without using FSM.
+
 1. UART Transmitter and Receiver Implementation along with reference designs and testbenches.
 2. Simulation waveform screenshots are provided.
 3. Performance comparisons are done.
 
-# UART Interface
+# UART
+
+This design is done using FSM.
 
 0. Reference: (https://blog.csdn.net/qq_43244515/article/details/124514416)
 
@@ -36,7 +40,7 @@
 ```
     UART Transmitter
 
-    input               clk,            // 50MHz Clock Signal  
+    input               uart_clk,       // 115200Hz Clock Signal  
     input               rst_n,          // Reset Negative  
     input               tx_en,          // Transmission Enable
     input   [7:0]       tx_in,          // Transmission Data
@@ -47,12 +51,35 @@
 ```
     UART Receiver
 
-    input               clk,            // 50MHz Clock Signal  
+    input               uart_clk,       // 115200Hz Clock Signal  
     input               rst_n,          // Reset Negative  
     input               rx_in,          // Date Received
     output  [7:0]       rx_out,         // Data Out
     output              rx_done         // Data Received and Done
 ```
+```
+    UART Interface
+
+    input               clk,            // 50 MHz Clock Signal
+    output              uart_clk,       // 115200Hz Clock Signal
+    input               rst_n,          // Reset Negative
+    input   [15:0]      cmd,            // [15]     : Read/Write 0/1  
+                                        // [14:8]   : Address  
+                                        // [7:0]    : Data
+    input               uart_valid,     // Valid Signal for UART  
+    output              uart_ready,     // Ready Signal for UART  
+
+    output  [7:0]       read_data,      // Date Read through UART  
+    output              read_valid,     // Valid Signal for read_data
+
+    output  [7:0]       tx_data,        // Data to send
+    output              tx_en,          // Enable data to send
+    input               tx_done,        // Data sent and done
+
+    input   [7:0]       rx_data,        // Data Received
+    input               rx_done,        // Data Received Done Signal
+```
+
 
 3. UART Frame Composition
 
@@ -69,6 +96,7 @@
     Clock Frequency         =   50MHz
     Data Width              =   8
     Address Width           =   7
+    
 ```
 5. State Information
 ```
@@ -97,7 +125,14 @@
 ```
 
 
-6. Interface Bahaviors
+6. Module Bahaviors
 ```
-    State
+    UART Interface
+
+        1.  Generate a slower uart clk at 115200Hz
+        2.  Once a cmd packet arrives, decode it and execute
+        3.  If it's a read operation, send only the address;
+            If it's a write operation, send the address (along with Read/Write Bit) first,
+                and then send the data
+        4.  
 ```
