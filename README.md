@@ -8,9 +8,11 @@
 
 0. Reference: (https://blog.csdn.net/qq_43244515/article/details/124514416)
 
-1. Interface Ports
+1. Interface Ports and Architecture
 
     ![plot](./UART_Ports.jfif)
+
+    ![plot](./UART_Architecture.png)
 
 ```
     UART Ports
