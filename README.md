@@ -55,7 +55,7 @@ This design is designed to connect with APB-UART Bridge.
 
     output  [7:0]       tx_data,        // Data to send
     output              tx_en,          // Enable data to send
-    input               tx_done,        // Data sent and done
+    input               tx_done         // Data sent and done
 ```
 ```
     UART Transmitter
@@ -92,7 +92,7 @@ This design is designed to connect with APB-UART Bridge.
     Clock Frequency         =   50MHz
     Data Width              =   8
     Address Width           =   7
-    Command Packe Length    =   16
+    Command Packet Length   =   16
 ```
 5. Module Bahaviors
 ```
