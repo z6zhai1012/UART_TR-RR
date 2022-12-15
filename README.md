@@ -14,7 +14,7 @@ This design is designed to connect with APB-UART Bridge.
 
 1. UART Architecture
 
-    ![plot](./UART_Architecture_new.png)
+    ![plot](./UART_Architecture.png)
 
 2. UART Ports
 
