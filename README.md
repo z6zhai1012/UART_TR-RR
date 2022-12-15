@@ -38,7 +38,20 @@
 
     input               clk,            // 50MHz Clock Signal  
     input               rst_n,          // Reset Negative  
-    input               
+    input               tx_en,          // Transmission Enable
+    input   [7:0]       tx_in,          // Transmission Data
+    output              tx_out,         // Data Out
+    output              tx_done         // Transmission Done
+```
+
+```
+    UART Receiver
+
+    input               clk,            // 50MHz Clock Signal  
+    input               rst_n,          // Reset Negative  
+    input               rx_in,          // Date Received
+    output  [7:0]       rx_out,         // Data Out
+    output              rx_done         // Data Received and Done
 ```
 
 3. UART Frame Composition
