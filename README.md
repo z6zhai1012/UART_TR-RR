@@ -10,7 +10,9 @@ This design is done without concerns of connecting to APB protocol.
 
 This design is designed to connect with APB-UART Bridge.
 
-0. Reference: (https://blog.csdn.net/qq_43244515/article/details/124514416)
+12/15/2022 Update: Parity bits in RX is of no use. May add error line.
+
+0. Inspired by https://blog.csdn.net/qq_43244515/article/details/124514416
 
 1. UART Architecture
 
@@ -71,15 +73,9 @@ This design is designed to connect with APB-UART Bridge.
     input               uart_valid,     // Valid Signal for UART  
     output              uart_ready,     // Ready Signal for UART  
 
-    output  [7:0]       read_data,      // Date Read through UART  
-    output              read_valid,     // Valid Signal for read_data
-
     output  [7:0]       tx_data,        // Data to send
     output              tx_en,          // Enable data to send
     input               tx_done,        // Data sent and done
-
-    input   [7:0]       rx_data,        // Data Received
-    input               rx_done,        // Data Received Done Signal
 ```
 
 
@@ -98,36 +94,9 @@ This design is designed to connect with APB-UART Bridge.
     Clock Frequency         =   50MHz
     Data Width              =   8
     Address Width           =   7
-    
+    Command Packe Length    =   16
 ```
-5. State Information
-```
-    Interface State Information
-    Curent State        Next State          Condition
-
-```
-```
-    Transmitter State Information
-
-    Curent State        Next State          Condition
-    IDLE                SEND                uart_valid = 1, uart_ready = 1
-                        IDLE                else
-    SEND                SEND                Bit Counter < 11 or (uart_valid = 1, uart_ready = 1)
-                        WAIT                Bit Counter = 11
-```
-```
-    Receiver State Information
-
-    Curent State        Next State          Condition
-    IDLE                RECEIVE             rx = 0
-                        IDLE                else
-    RECEIVE             RECEIVE             Bit Counter < 11 or rx = 0
-                        IDLE                else
-
-```
-
-
-6. Module Bahaviors
+5. Module Bahaviors
 ```
     UART Interface
 
@@ -136,5 +105,88 @@ This design is designed to connect with APB-UART Bridge.
         3.  If it's a read operation, send only the address;
             If it's a write operation, send the address (along with Read/Write Bit) first,
                 and then send the data
-        4.  Once a UART frame is received, 
 ```
+```
+    UART Transmitter
+
+        1. Once a UART frame arrives (tx_en is ON), initiate sending process
+```
+```
+    UART Receiver
+
+        1. Once a UART frame arrives (0 is detected), receive and decode the data
+        2. After the data receiving process is done, send out the received data
+```
+
+6. State Information
+```
+    Interface State Information
+    Current State       Next State          Condition
+    IDLE                SEND                uart_valid = 1, rst_n = 1
+                        IDLE                else
+    SEND                WAIT                
+    WAIT                SEND                SEND_NEXT = 1 && tx_done = 1
+                        IDLE                SEND_NEXT = 0 && tx_done = 1
+                        WAIT                tx_done = 0
+    
+    Interface State Behavior
+    Current State       Behavior
+    IDLE                uart_clk is generated; uart_ready = 1; tx_en = 0;
+                            tx_data = 8'b0; all regs = 0
+    SEND                uart_clk is generated; uart_ready = 0; tx_en = 1;
+                            if (SEND_NEXT == 1)
+                                tx_data <= cmd[7:0]
+                                SEND_NEXT <= 0
+                            else
+                                tx_data <= cmd[15:8]
+                                SEND_NEXT <= cmd[15]
+    WAIT                uart_clk is generated; uart_ready = 0; tx_en = 0;
+```
+```
+    Transmitter State Information
+
+    Current State       Next State          Condition
+    IDLE                SEND                uart_valid = 1, uart_ready = 1, rst_n = 1
+                        IDLE                else
+    SEND                SEND                Bit Counter < 10 or (uart_valid = 1, uart_ready = 1)
+                        IDLE                Bit Counter = 10
+
+    Transmitter State Behavior
+    Current State       Behavior
+    IDLE                tx_out = 1; tx_done = 0; all regs = 0
+    SEND                if (bit_counter == 0)
+                            tx_out = 0
+                            tx_done = 0
+                            bit_counter = bit_counter + 1
+                        else if (bit_counter == 10)
+                            tx_out = 1
+                            tx_done = 1
+                            bit_counter = bit_counter + 1
+                        else if (bit_counter == 9)
+                            tx_out = odd parity bit
+                            tx_done = 0
+                            bit_counter = bit_counter + 1
+                        else
+                            tx_out = tx_in[bit_counter - 1]
+                            tx_done = 0
+                            bit_counter = bit_counter + 1
+```
+```
+    Receiver State Information
+
+    Current State       Next State          Condition
+    IDLE                RECEIVE             rx_in = 0, rst_n = 1
+                        IDLE                else
+    RECEIVE             RECEIVE             Bit Counter < 8 or rx_in = 0
+                        IDLE                Bit Counter = 8
+
+    Receiver State Behavior
+    Current State       Behavior
+    IDLE                rx_out = 8'b0; rx_done = 0; all regs = 0
+    RECEIVE             rx_out[bit_counter] = rx_in; bit_counter = bit_counter + 1
+
+
+```
+
+
+
