@@ -144,10 +144,10 @@ This design is designed to connect with APB-UART Bridge.
     Transmitter State Information
 
     Current State       Next State          Condition
-    IDLE                SEND                uart_valid = 1, uart_ready = 1, rst_n = 1
+    IDLE                SEND                tx_en = 1, rst_n = 1
                         IDLE                else
-    SEND                SEND                Bit Counter < 10 or (uart_valid = 1, uart_ready = 1)
-                        IDLE                Bit Counter = 10
+    SEND                SEND                Bit Counter < 11 or (uart_valid = 1, uart_ready = 1)
+                        IDLE                Bit Counter = 11
 
     Transmitter State Behavior
     Current State       Behavior
