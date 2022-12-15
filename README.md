@@ -14,7 +14,7 @@ This design is designed to connect with APB-UART Bridge.
 
 1. UART Architecture
 
-    ![plot](./UART_Architecture.png)
+    ![plot](./UART_Architecture_new.png)
 
 2. UART Ports
 
@@ -136,5 +136,5 @@ This design is designed to connect with APB-UART Bridge.
         3.  If it's a read operation, send only the address;
             If it's a write operation, send the address (along with Read/Write Bit) first,
                 and then send the data
-        4.  
+        4.  Once a UART frame is received, 
 ```
