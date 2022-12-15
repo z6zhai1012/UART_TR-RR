@@ -8,11 +8,13 @@
 
 0. Reference: (https://blog.csdn.net/qq_43244515/article/details/124514416)
 
-1. Interface Ports and Architecture
-
-    ![plot](./UART_Ports.jfif)
+1. UART Architecture
 
     ![plot](./UART_Architecture.png)
+
+2. UART Ports
+
+    ![plot](./UART_Ports.jfif)
 
 ```
     UART Ports
@@ -35,7 +37,7 @@
     UART Transmitter
 ```
 
-2. UART Frame Composition
+3. UART Frame Composition
 
     ![plot](./UART_Frame.png)
 
@@ -44,14 +46,14 @@
     1 bit of parity (to make total # of 1s odd),
     1 bit of stop (1)
 
-3. Technical Specs
+4. Technical Specs
 ```
     Bits per Second (BPS)   =   115200
     Clock Frequency         =   50MHz
     Data Width              =   8
     Address Width           =   7
 ```
-4. State Information
+5. State Information
 ```
     Interface State Information
     Curent State        Next State          Condition
@@ -78,7 +80,7 @@
 ```
 
 
-5. Interface Bahaviors
+6. Interface Bahaviors
 ```
     State
 ```
