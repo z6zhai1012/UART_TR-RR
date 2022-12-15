@@ -14,19 +14,19 @@
 
     Ports
 
-    |input               |clk,            |// 50MHz Clock Signal  
-    |input               |rst_n,          |// Reset Negative  
-    |input   [15:0]      |cmd,            |// [15]     : Read/Write 0/1  
-    |                    |                |// [14:8]   : Address  
-    |                    |                |// [7:0]    : Data  
-    |input               |cmd_valid,      |// Valid Signal for cmd  
-    |output              |cmd_ready,      |// Ready Signal for cmd  
-    |                    |                |
-    |output  [7:0]       |read_data,      |// Date Read through UART  
-    |output              |read_valid,     |// Valid Signal for read_data  
-    |                    |                |
-    |output              |tx,             |// UART Transitter  
-    |input               |rx,             |// UART Receiver  
+    |input               |clk,            |// 50MHz Clock Signal          |
+    |input               |rst_n,          |// Reset Negative              |
+    |input   [15:0]      |cmd,            |// [15]     : Read/Write 0/1   |
+    |                    |                |// [14:8]   : Address          |
+    |                    |                |// [7:0]    : Data             |
+    |input               |cmd_valid,      |// Valid Signal for cmd        |
+    |output              |cmd_ready,      |// Ready Signal for cmd        |
+    |                    |                |                               |
+    |output  [7:0]       |read_data,      |// Date Read through UART      |
+    |output              |read_valid,     |// Valid Signal for read_data  |
+    |                    |                |                               |
+    |output              |tx,             |// UART Transitter             |
+    |input               |rx,             |// UART Receiver               |
 
 2. UART Frame Composition
 
