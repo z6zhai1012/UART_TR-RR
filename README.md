@@ -1,6 +1,6 @@
 # UART_TR-RR
 
-This design is done without using FSM.
+This design is done without concerns of connecting to APB protocol.
 
 1. UART Transmitter and Receiver Implementation along with reference designs and testbenches.
 2. Simulation waveform screenshots are provided.
@@ -8,7 +8,7 @@ This design is done without using FSM.
 
 # UART
 
-This design is done using FSM.
+This design is designed to connect with APB-UART Bridge.
 
 0. Reference: (https://blog.csdn.net/qq_43244515/article/details/124514416)
 
