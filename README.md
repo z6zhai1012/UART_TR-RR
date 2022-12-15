@@ -12,15 +12,16 @@
 
     ![plot](./UART_Ports.jfif)
 
-    Ports
 ```
+    UART Ports
+
     input               clk,            // 50MHz Clock Signal  
     input               rst_n,          // Reset Negative  
     input   [15:0]      cmd,            // [15]     : Read/Write 0/1  
                                         // [14:8]   : Address  
                                         // [7:0]    : Data  
-    input               cmd_valid,      // Valid Signal for cmd  
-    output              cmd_ready,      // Ready Signal for cmd  
+    input               uart_valid,     // Valid Signal for UART  
+    output              uart_ready,     // Ready Signal for UART  
 
     output  [7:0]       read_data,      // Date Read through UART  
     output              read_valid,     // Valid Signal for read_data  
@@ -28,12 +29,16 @@
     output              tx,             // UART Transitter  
     input               rx,             // UART Receiver  
 ```
+```
+    UART Transmitter
+```
+
 2. UART Frame Composition
 
     ![plot](./UART_Frame.png)
 
     1 bit of start bit (0),
-    7 bits of data,
+    8 bits of data,
     1 bit of parity (to make total # of 1s odd),
     1 bit of stop (1)
 
@@ -44,5 +49,34 @@
     Data Width              =   8
     Address Width           =   7
 ```
-4. Interface Bahaviors
+4. State Information
+```
+    Interface State Information
+    Curent State        Next State          Condition
 
+```
+```
+    Transmitter State Information
+
+    Curent State        Next State          Condition
+    IDLE                SEND                uart_valid = 1, uart_ready = 1
+                        IDLE                else
+    SEND                SEND                Bit Counter < 11 or (uart_valid = 1, uart_ready = 1)
+                        WAIT                Bit Counter = 11
+```
+```
+    Receiver State Information
+
+    Curent State        Next State          Condition
+    IDLE                RECEIVE             rx = 0
+                        IDLE                else
+    RECEIVE             RECEIVE             Bit Counter < 11 or rx = 0
+                        IDLE                else
+
+```
+
+
+5. Interface Bahaviors
+```
+    State
+```
