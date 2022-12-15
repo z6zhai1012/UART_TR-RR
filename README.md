@@ -6,4 +6,4 @@
 
 # UART Interface
 
-1. ![alt text](https://github.com/z6zhai1012/[reponame]/blob/UART_TR_RR/UART_Ports.jfif?raw=true)
+1. ![plot](./UART_Ports.jfif)
