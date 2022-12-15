@@ -37,5 +37,12 @@
     1 bit of parity (to make total # of 1s odd),
     1 bit of stop (1)
 
-3. Interface Bahaviors
+3. Technical Specs
+```
+    Bits per Second (BPS)   =   115200
+    Clock Frequency         =   50MHz
+    Data Width              =   8
+    Address Width           =   7
+```
+4. Interface Bahaviors
 
