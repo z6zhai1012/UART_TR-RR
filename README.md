@@ -23,23 +23,6 @@ This design is designed to connect with APB-UART Bridge.
     ![plot](./UART_Ports.jfif)
 
 ```
-    UART Interface
-
-    input               clk,            // 50 MHz Clock Signal
-    output              uart_clk,       // 115200Hz Clock Signal
-    input               rst_n,          // Reset Negative
-
-    input   [15:0]      cmd,            // [15]     : Read/Write 0/1  
-                                        // [14:8]   : Address  
-                                        // [7:0]    : Data
-    input               uart_valid,     // Valid Signal for UART  
-    output              uart_ready,     // Ready Signal for UART  
-
-    output  [7:0]       tx_data,        // Data to send
-    output              tx_en,          // Enable data to send
-    input               tx_done,        // Data sent and done
-```
-```
     UART Ports
 
     input               clk,            // 50MHz Clock Signal  
@@ -56,6 +39,23 @@ This design is designed to connect with APB-UART Bridge.
 
     output              tx,             // UART Transitter  
     input               rx              // UART Receiver  
+```
+```
+    UART Interface
+
+    input               clk,            // 50 MHz Clock Signal
+    output              uart_clk,       // 115200Hz Clock Signal
+    input               rst_n,          // Reset Negative
+
+    input   [15:0]      cmd,            // [15]     : Read/Write 0/1  
+                                        // [14:8]   : Address  
+                                        // [7:0]    : Data
+    input               uart_valid,     // Valid Signal for UART  
+    output              uart_ready,     // Ready Signal for UART  
+
+    output  [7:0]       tx_data,        // Data to send
+    output              tx_en,          // Enable data to send
+    input               tx_done,        // Data sent and done
 ```
 ```
     UART Transmitter
