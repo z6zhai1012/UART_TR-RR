@@ -14,8 +14,8 @@
 
     Ports
 
-    input               clk,            // 50MHz Clock Signal  
-    input               rst_n,          // Reset Negative  
+    input...............clk,............// 50MHz Clock Signal  
+    input...............rst_n,..........// Reset Negative  
     input   [15:0]      cmd,            // [15]     : Read/Write 0/1  
                                         // [14:8]   : Address  
                                         // [7:0]    : Data  
