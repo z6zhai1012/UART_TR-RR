@@ -23,7 +23,6 @@ module UART_TX
     output  reg                     tx_done             // Transmission Done
 );
 
-    localparam          CYCLES_PER_BIT  =   SYS_CLK_FREQ / BPS;
     localparam  [1:0]   IDLE            =   2'b01;
     localparam  [1:0]   SEND            =   2'b10;
 
