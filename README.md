@@ -187,9 +187,12 @@ This design is designed to connect with APB-UART Bridge.
     Current State       Behavior
     IDLE                rx_out = 8'b0; rx_done = 0; all regs = 0
     RECEIVE             rx_out[bit_counter] = rx_in; bit_counter = bit_counter + 1
-
-
 ```
 
-
+7. Testing Feedback
+```
+    TX:
+        It is crutial to avoid glitch on tx_en.
+        A small glitch may initiate a non-stoppable UART transmission.
+```
 
