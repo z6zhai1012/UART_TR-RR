@@ -56,6 +56,11 @@ This design is designed to connect with APB-UART Bridge.
     output  [7:0]       tx_data,        // Data to send
     output              tx_en,          // Enable data to send
     input               tx_done         // Data sent and done
+
+    input   [7:0]       rx_data,        // Data Received
+    input               rx_done,        // Data Received Done
+    output  [7:0]       read_data,      // Data Read
+    output              read_valid      // Data Read Valid
 ```
 ```
     UART Transmitter
