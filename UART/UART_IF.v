@@ -27,13 +27,30 @@ module UART_IF
 
     output  reg [DATA_WIDTH - 1:0]  tx_data,            // Data to send
     output  reg                     tx_en,              // Enable data to send
-    input                           tx_done             // Data sent and done
+    input                           tx_done,            // Data sent and done
+
+    input   [DATA_WIDTH - 1:0]      rx_data,            // Data Received
+    input                           rx_done,            // Data Received Done
+    output  reg [DATA_WIDTH - 1:0]  read_data,          // Data Read
+    output  reg                     read_valid          // Data Read Valid
 );
 
     localparam          CYCLES_PER_BIT  =   SYS_CLK_FREQ / BPS;
     localparam  [2:0]   IDLE            =   3'b001;
     localparam  [2:0]   SEND            =   3'b010;
     localparam  [2:0]   WAIT            =   3'b100;
+
+    // Receive Data and Send Out Immediately
+    always @ (posedge rx_done or negedge rst_n) begin
+        if (rx_done) begin
+            read_data   <=  rx_data;
+            read_valid  <=  1'b1;
+        end
+        else begin
+            read_data   <=  0;
+            read_valid  <=  0;
+        end
+    end
 
     reg     [2:0]       current_state;
     reg     [31:0]      cycle_counter;
