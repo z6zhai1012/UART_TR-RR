@@ -10,7 +10,7 @@
 
 module UART_RX
 #(
-    parameter   DATA_WIDTH          = 'd8,              // Transmission Data Width
+    parameter   DATA_WIDTH          = 'd8           // Transmission Data Width
 )
 (
     input                           uart_clk,       // 115200Hz Clock Signal  
