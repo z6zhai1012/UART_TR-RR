@@ -11,9 +11,6 @@
 module UART_RX
 #(
     parameter   DATA_WIDTH          = 'd8,              // Transmission Data Width
-    parameter   BPS                 = 'd115_200,        // UART Out Frequency bits/s
-    parameter   SYS_CLK_FREQ        = 'd50_000_000,     // System Clock Frequency
-    parameter   CMD_PKT_LEN         = 'd16              // Command Packet Length
 )
 (
     input                           uart_clk,       // 115200Hz Clock Signal  
