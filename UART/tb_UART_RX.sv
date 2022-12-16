@@ -2,7 +2,7 @@
 // Author: Zhen Zhai
 // Date: 12/7/2022
 // 
-// Module Name: tb_UART_RR
+// Module Name: tb_UART_RX
 //      1. A simple testbench for module UART_RX
 //
 // *****************************************************************************
