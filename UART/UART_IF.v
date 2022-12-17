@@ -40,9 +40,31 @@ module UART_IF
     localparam  [2:0]   SEND                    =   3'b010;
     localparam  [2:0]   WAIT                    =   3'b100;
 
+    reg                             rx_done_reg;
+    reg                             rx_done_posedge;
+
+    // tx_done_reg and tx_done_posedge behavior
+    always @ (posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            rx_done_reg     <=  0;
+            rx_done_posedge <=  0;
+        end
+        else begin
+            rx_done_reg     <=  rx_done;
+            if ((rx_done_reg == 0) && (rx_done == 1))
+                rx_done_posedge     <=  1;
+            else
+                rx_done_posedge     <=  0;
+        end
+    end
+
     // Receive Data and Send Out Immediately
-    always @ (posedge rx_done or negedge rst_n) begin
-        if (rx_done) begin
+    always @ (posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            read_data   <=  0;
+            read_valid  <=  0;
+        end
+        else if (rx_done_posedge) begin
             read_data   <=  rx_data;
             read_valid  <=  1'b1;
         end
