@@ -16,11 +16,11 @@ This design is designed to connect with APB-UART Bridge.
 
 1. UART Architecture
 
-    ![plot](./UART_Architecture.png)
+    ![plot](./README_Pictures/UART_Architecture.png)
 
 2. UART Ports
 
-    ![plot](./UART_Ports.jfif)
+    ![plot](./README_Pictures/UART_Ports.jfif)
 
 ```
     UART Ports
@@ -36,7 +36,7 @@ This design is designed to connect with APB-UART Bridge.
     input               uart_valid,     // Valid Signal for UART  
     output              uart_ready,     // Ready Signal for UART  
 
-    //  Uplink Master Interface
+    // Uplink Master Interface
     output  [7:0]       read_data,      // Date Read through UART  
     output              read_valid,     // Valid Signal for read_data  
 
@@ -47,20 +47,24 @@ This design is designed to connect with APB-UART Bridge.
 ```
     UART Interface
 
+    // System Ports
     input               clk,            // 50 MHz Clock Signal
     output              uart_clk,       // 115200Hz Clock Signal
     input               rst_n,          // Reset Negative
 
+    // Downlink Slave Interface
     input   [15:0]      cmd,            // [15]     : Read/Write 0/1  
                                         // [14:8]   : Address  
                                         // [7:0]    : Data
     input               uart_valid,     // Valid Signal for UART  
     output              uart_ready,     // Ready Signal for UART  
 
+    // Downlink Master Interfa
     output  [7:0]       tx_data,        // Data to send
     output              tx_en,          // Enable data to send
     input               tx_done         // Data sent and done
 
+    // Uplink Interface
     input   [7:0]       rx_data,        // Data Received
     input               rx_done,        // Data Received Done
     output  [7:0]       read_data,      // Data Read
@@ -88,7 +92,7 @@ This design is designed to connect with APB-UART Bridge.
 
 3. UART Frame Composition
 
-    ![plot](./UART_Frame.png)
+    ![plot](./README_Pictures/UART_Frame.png)
 
     1 bit of start bit (0),
     8 bits of data,
@@ -204,6 +208,8 @@ This design is designed to connect with APB-UART Bridge.
 
 This design is located under UART folder.
 
+0. Inspired by AMBA APB Protocol Document
+
 1. APB2UART Ports
 
 
@@ -211,5 +217,53 @@ This design is located under UART folder.
 ```
     APB2UART
 
-    // S
+    // System Ports
+    input                       PCLK;
+    input                       PRESET_n;
+
+    // Basic APB Ports
+    input   [ADDR_WIDTH-1:0]    PADDR;      // Address
+    input                       PSEL;
+    input                       PENABLE;
+    input                       PWRITE;
+    input   [DATA_WIDTH-1:0]    PWDATA;
+    output                      PREADY;
+    output  [DATA_WIDTH-1:0]    PRDATA;
+
+    // UART Interface Ports
+    input   [CMD_PKT_LEN-1:0]   cmd,            // [15]     : Read/Write 0/1  
+                                                // [14:8]   : Address  
+                                                // [7:0]    : Data  
+    input                       uart_valid,     // Valid Signal for UART  
+    output                      uart_ready,     // Ready Signal for UART  
+    output  [DATA_WIDTH-1:0]    read_data,      // Date Read through UART  
+    output                      read_valid,     // Valid Signal for read_data  
+    
+    // Optional ABP Port; Not implemented in our design
+    output                      PSLVERR;    // Slave Error Message
+    
+    // Advanced APB Ports; Not implemented in our design
+    input   [2:0]               PROT;
+    input   [DATA_WIDTH/8-1:0]  PSTRB;
+    input                       PWAKEUP;
+    input   [USER_REQ_WIDTH-1:0]    PAUSER;
+    input   [USER_DATA_WIDTH-1:0]   PWUSER;
+    input   [USER_DATA_WIDTH-1:0]   PRUSER;
+    input   [USER_RESP_WIDTH-1:0]   PBUSER;
 ```
+
+2. Technical Specs
+
+```
+    ADDR_WIDTH      =   32
+        : Max width is 32, depending on peripheral bus bridge unit
+          In our case, we only use least significant 7 bits
+    DATA_WIDTH      =   8
+        : Can be 8, 16, 32 bits wide.
+          We will use 8 for easier implementation with UART
+    
+```
+
+3. State Information
+
+    ![plot](./README_Pictures/ABP2UART_States.png)
