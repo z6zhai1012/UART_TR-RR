@@ -10,7 +10,7 @@ This design is done without concerns of connecting to APB protocol.
 
 This design is designed to connect with APB-UART Bridge.
 
-12/15/2022 Update: Parity bits in RX is of no use. May add error line.
+12/15/2022 Update: Parity bits in RX is of no use. May use it as error signal after modification.
 
 0. Inspired by https://blog.csdn.net/qq_43244515/article/details/124514416
 
@@ -25,18 +25,22 @@ This design is designed to connect with APB-UART Bridge.
 ```
     UART Ports
 
+    // System Ports
     input               clk,            // 50MHz Clock Signal  
     input               rst_n,          // Reset Negative
     
+    // Downlink Slave Interface
     input   [15:0]      cmd,            // [15]     : Read/Write 0/1  
                                         // [14:8]   : Address  
                                         // [7:0]    : Data  
     input               uart_valid,     // Valid Signal for UART  
     output              uart_ready,     // Ready Signal for UART  
 
+    //  Uplink Master Interface
     output  [7:0]       read_data,      // Date Read through UART  
     output              read_valid,     // Valid Signal for read_data  
 
+    // Downlink Interface
     output              tx,             // UART Transitter  
     input               rx              // UART Receiver  
 ```
@@ -194,4 +198,18 @@ This design is designed to connect with APB-UART Bridge.
 ```
     To manage cross clock domain, I employed a posedge edge detector on the faster clock side.
     This makes the return done signal (on slower clock) a done signal on faster clock.
+```
+
+# APB-to-UART Bridge
+
+This design is located under UART folder.
+
+1. APB2UART Ports
+
+
+
+```
+    APB2UART
+
+    // S
 ```
