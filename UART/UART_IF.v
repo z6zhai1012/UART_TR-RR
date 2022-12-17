@@ -35,10 +35,10 @@ module UART_IF
     output  reg                     read_valid          // Data Read Valid
 );
 
-    localparam          CYCLES_PER_BIT  =   SYS_CLK_FREQ / BPS;
-    localparam  [2:0]   IDLE            =   3'b001;
-    localparam  [2:0]   SEND            =   3'b010;
-    localparam  [2:0]   WAIT            =   3'b100;
+    localparam          HALF_CYCLES_PER_BIT     =   SYS_CLK_FREQ / (BPS * 2);
+    localparam  [2:0]   IDLE                    =   3'b001;
+    localparam  [2:0]   SEND                    =   3'b010;
+    localparam  [2:0]   WAIT                    =   3'b100;
 
     // Receive Data and Send Out Immediately
     always @ (posedge rx_done or negedge rst_n) begin
@@ -56,13 +56,32 @@ module UART_IF
     reg     [31:0]      cycle_counter;
     reg                 send_next;
 
+    reg                 tx_done_reg;
+    reg                 tx_done_posedge;
+
+    // tx_done_reg and tx_done_posedge behavior
+    always @ (posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            tx_done_reg     <=  0;
+            tx_done_posedge <=  0;
+        end
+        else begin
+            tx_done_reg     <=  tx_done;
+            if ((tx_done_reg == 0) && (tx_done == 1))
+                tx_done_posedge     <=  1;
+            else
+                tx_done_posedge     <=  0;
+        end
+    end
+
+
     // UART_CLK Generation and Cycle Counter
     always @ (posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             uart_clk        <=  0;
             cycle_counter   <=  32'b0;
         end
-        else if (cycle_counter == CYCLES_PER_BIT - 1) begin
+        else if (cycle_counter == HALF_CYCLES_PER_BIT - 1) begin
             uart_clk        <=  ~uart_clk;
             cycle_counter   <=  32'b0;
         end
@@ -93,14 +112,14 @@ module UART_IF
                         if (send_next == 1)
                             send_next   <=  0;
                         else
-                            send_next   <=  cmd[DATA_WIDTH-1];
+                            send_next   <=  cmd[CMD_PKT_LEN-1];
                         current_state   <= WAIT;
                     end
                 WAIT:
                     begin
-                        if (send_next == 1 && tx_done == 1)
+                        if (send_next == 1 && tx_done_posedge == 1)
                             current_state   <=  SEND;
-                        else if (send_next == 0 && tx_done == 1)
+                        else if (send_next == 0 && tx_done_posedge == 1)
                             current_state   <=  IDLE;
                         else
                             current_state   <=  WAIT;
@@ -112,6 +131,16 @@ module UART_IF
                     end
             endcase
         end
+    end
+
+    // Maintain tx_en = 1 for one UART clk
+    always @ (posedge uart_clk or negedge rst_n) begin
+        if (!rst_n)
+            tx_en   <=  0;
+        else if (tx_en == 1)
+            tx_en   <=  0;
+        else
+            tx_en   <=  0;
     end
     
     // FSM Combinational Logic Behavior
@@ -137,7 +166,6 @@ module UART_IF
             WAIT:
                 begin
                     uart_ready  <=  0;
-                    tx_en       <=  0;
                 end
             default:
                 begin

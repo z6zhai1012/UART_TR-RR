@@ -53,7 +53,7 @@ module UART_TX
                     end
                 SEND:
                     begin
-                        if ((bit_counter < 11) || (tx_en == 1))
+                        if ((bit_counter < 10) || (tx_en == 1))
                             current_state   <=  SEND;
                         else
                             current_state   <=  IDLE;
@@ -81,16 +81,8 @@ module UART_TX
     always @ (posedge uart_clk or negedge rst_n) begin
         if (!rst_n)
             parity_bit  <=  0;
-        else if ((bit_counter == 0)||(bit_counter > 9))
-            parity_bit  <=  0;
-        else if (bit_counter == 9)
-            parity_bit  <=  ~parity_bit;
-        else begin
-            if (tx_in_reg[bit_counter] == 1)
-                parity_bit  <=  ~parity_bit;
-            else
-                parity_bit  <=  parity_bit;
-        end
+        else
+            parity_bit  <=  ~^tx_in_reg;
     end
 
     // FSM Combinational Logic Behavior
