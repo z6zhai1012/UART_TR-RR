@@ -266,4 +266,4 @@ This design is located under UART folder.
 
 3. State Information
 
-    ![plot](./README_Pictures/APB2UART_States.png)
+    ![plot](./README_Pictures/APB2UART_STATES.png)
