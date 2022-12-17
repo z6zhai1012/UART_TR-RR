@@ -128,8 +128,8 @@ This design is designed to connect with APB-UART Bridge.
     IDLE                SEND                uart_valid = 1, rst_n = 1
                         IDLE                else
     SEND                WAIT                
-    WAIT                SEND                SEND_NEXT = 1 && tx_done = 1
-                        IDLE                SEND_NEXT = 0 && tx_done = 1
+    WAIT                SEND                SEND_NEXT = 1 && tx_done_posedge = 1
+                        IDLE                SEND_NEXT = 0 && tx_done_posedge = 1
                         WAIT                tx_done = 0
     
     Interface State Behavior
@@ -189,10 +189,9 @@ This design is designed to connect with APB-UART Bridge.
     RECEIVE             rx_out[bit_counter] = rx_in; bit_counter = bit_counter + 1
 ```
 
-7. Testing Feedback
-```
-    TX:
-        It is crutial to avoid glitch on tx_en.
-        A small glitch may initiate a non-stoppable UART transmission.
-```
+7. Take-away
 
+```
+    To manage cross clock domain, I employed a posedge edge detector on the faster clock side.
+    This makes the return done signal (on slower clock) a done signal on faster clock.
+```
