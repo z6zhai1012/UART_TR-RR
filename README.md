@@ -223,21 +223,21 @@ This design is located under UART folder.
 
     // Basic APB Ports
     input   [ADDR_WIDTH-1:0]    PADDR;      // Address
-    input                       PSEL;
-    input                       PENABLE;
-    input                       PWRITE;
+    input                       PSEL;       // 1 for being selected
+    input                       PENABLE;    // 1 to enable transmission
+    input                       PWRITE;     // 1 for write, 0 for read
     input   [DATA_WIDTH-1:0]    PWDATA;
     output                      PREADY;
     output  [DATA_WIDTH-1:0]    PRDATA;
 
     // UART Interface Ports
-    input   [CMD_PKT_LEN-1:0]   cmd,            // [15]     : Read/Write 0/1  
+    output  [CMD_PKT_LEN-1:0]   cmd,            // [15]     : Read/Write 0/1  
                                                 // [14:8]   : Address  
                                                 // [7:0]    : Data  
-    input                       uart_valid,     // Valid Signal for UART  
-    output                      uart_ready,     // Ready Signal for UART  
-    output  [DATA_WIDTH-1:0]    read_data,      // Date Read through UART  
-    output                      read_valid,     // Valid Signal for read_data  
+    output                      uart_valid,     // Valid Signal for UART  
+    input                       uart_ready,     // Ready Signal for UART  
+    input   [DATA_WIDTH-1:0]    read_data,      // Date Read through UART  
+    input                       read_valid,     // Valid Signal for read_data  
     
     // Optional ABP Port; Not implemented in our design
     output                      PSLVERR;    // Slave Error Message
@@ -255,7 +255,7 @@ This design is located under UART folder.
 2. Technical Specs
 
 ```
-    ADDR_WIDTH      =   32
+    ADDR_WIDTH      =   7
         : Max width is 32, depending on peripheral bus bridge unit
           In our case, we only use least significant 7 bits
     DATA_WIDTH      =   8
@@ -264,6 +264,32 @@ This design is located under UART folder.
     
 ```
 
-3. State Information
+3. Module Behaviors
+```
+    Downlink:
+        1. Receive ADDR, WDATA, WRITE once ENABLE and SEL are 1
+        2. Once a APB packet arrives, convert it into UART command
+        3. Send cmd and uart_valid = 1; Wait until UART ready signal is 1
+    
+    Uplink:
+        1. Once read_data and read_valid is ready, then send it over APB channel
+```
+
+4. APB Master State Information
 
     ![plot](./README_Pictures/APB2UART_STATES.png)
+
+5. APB Slave State Information
+```
+    State Transition Conditions
+    Current State   Next State      Condition
+    IDLE            Send            PSEL = 1; PENABLE = 1
+                    IDLE            else
+    SEND            IDLE            uart_ready = 1
+                    SEND            else
+
+    State Behaviors
+    Current State   Behaviors
+    IDLE            PREADY = 1; cmd = 0; uart_valid = 0
+    SEMD            PREADY = 0; cmd = {PWRITE, PADDR, PWDATA}; uart_valid = 1
+```
